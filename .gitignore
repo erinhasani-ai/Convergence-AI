@@ -32,3 +32,9 @@ dist/
 build/
 coverage/
 *.log
+Prompts/
+# Next.js / test output
+.next/
+next-env.d.ts
+*.tsbuildinfo
+test-results/
