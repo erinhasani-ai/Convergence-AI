@@ -1,0 +1,34 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Editor and local workspace settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+.aws/
+*.pem
+*.key
+
+# Dependencies and virtual environments
+node_modules/
+.venv/
+venv/
+
+# Generated files and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+dist/
+build/
+coverage/
+*.log
