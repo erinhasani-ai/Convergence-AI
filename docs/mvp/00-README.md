@@ -37,3 +37,5 @@ For the live AI call, put `ANTHROPIC_API_KEY=...` **or** `GEMINI_API_KEY=...` in
 
 ## Explicitly out of scope for the MVP
 Provider registry, event outbox, database, auth/personas, RightBuyer/PartsBridge/ReadyToMove (shown as "Planned" cards), time windows, maps, FX, Playwright.
+
+**Presenting?** Use the deck at [`docs/pitch/VehicleOS-pitch.pptx`](../pitch/VehicleOS-pitch.pptx) and read [06-demo-guide.md](06-demo-guide.md): the 4-minute run-of-show, the live-demo script, the judge feedback and how we answer it, and what to do if something breaks on stage.
