@@ -26,7 +26,7 @@ export const PROVIDER: "anthropic" | "gemini" =
   explicit === "anthropic" || explicit === "gemini" ? explicit : !process.env.ANTHROPIC_API_KEY && process.env.GEMINI_API_KEY ? "gemini" : "anthropic";
 export const PROVIDER_LABEL = PROVIDER === "gemini" ? "Gemini" : "Claude";
 export const MODEL_ID =
-  PROVIDER === "gemini" ? process.env.VEHICLEOS_GEMINI_MODEL || "gemini-flash-latest" : process.env.VEHICLEOS_MODEL_ID || "claude-opus-5-5";
+  PROVIDER === "gemini" ? process.env.VEHICLEOS_GEMINI_MODEL || "gemini-3.5-flash" : process.env.VEHICLEOS_MODEL_ID || "claude-opus-5-5";
 const KEY_VAR = PROVIDER === "gemini" ? "GEMINI_API_KEY" : "ANTHROPIC_API_KEY";
 export const modelConfigured = () => Boolean(process.env[KEY_VAR]);
 
