@@ -18,6 +18,8 @@ function K({ k, yes = "yes", no = "no" }: { k: Knowable<boolean> | null | undefi
   if (k.state === "unknown") return <span className="badge b-unk" title={k.reason}>unknown ({k.reason.replace(/_/g, " ")})</span>;
   return <span className="badge b-plain">not applicable</span>;
 }
+const EvLinks = ({ ids }: { ids: string[] }) =>
+  ids.length ? <>{ids.map((id, i) => <span key={id}>{i > 0 && ", "}<a href={`#ev-${id}`} title="Show this evidence record">{id}</a></span>)}</> : <>—</>;
 const Stale = ({ x }: { x: { freshness: string; staleReasons: string[] } | null }) =>
   x && x.freshness !== "fresh" ? <div className="banner b-warn" role="status"><strong>Out of date:</strong> {x.staleReasons.join("; ")}. Recompute to update — the old result stays in history.</div> : null;
 const ErrorBox = ({ e }: { e: ApiErr | undefined }) =>
@@ -137,7 +139,7 @@ export default function Journey({ focus }: { focus?: Focus }) {
           <h3>Evidence (append-only)</h3>
           <div className="tablewrap"><table>
             <thead><tr><th>ID</th><th>Kind / source</th><th>Observed</th><th>Text</th></tr></thead>
-            <tbody>{v.evidence.map((e) => <tr key={e.evidenceId}><td className="mono">{e.evidenceId}</td><td className="small">{e.kind.replace(/_/g, " ")}<div className="muted">{e.sourceOrganization} (simulated) · {e.trustLevel.replace("_", " ")}</div></td><td className="small">{local(e.observedAt)}</td><td>{e.text}</td></tr>)}</tbody>
+            <tbody>{v.evidence.map((e) => <tr key={e.evidenceId} id={`ev-${e.evidenceId}`}><td className="mono">{e.evidenceId}</td><td className="small">{e.kind.replace(/_/g, " ")}<div className="muted">{e.sourceOrganization} (simulated) · {e.trustLevel.replace("_", " ")}</div></td><td className="small">{local(e.observedAt)}</td><td>{e.text}</td></tr>)}</tbody>
           </table></div>
           <h3>New inspector note</h3>
           <label className="small muted" htmlFor="note">Edit to show an altered input, then add it to the evidence record.</label>
@@ -161,10 +163,10 @@ export default function Journey({ focus }: { focus?: Focus }) {
                 <tbody>{pass.interpretation.findings.map((f, i) => (
                   <tr key={i}><td>{f.text}{f.field && <div className="small mono muted">{f.field} = {String(f.proposedValue)}</div>}</td>
                     <td><span className={`badge ${f.evidenceStatus === "supported" ? "b-ok" : f.evidenceStatus === "conflicting" ? "b-warn" : f.evidenceStatus === "contradicted" ? "b-bad" : "b-unk"}`}>{f.evidenceStatus}</span></td>
-                    <td className="small">{f.severity}</td><td className="mono small">{f.supportingEvidenceIds.join(", ")}</td><td className="mono small">{f.contradictingEvidenceIds.join(", ") || "—"}</td><td className="small">{local(f.observedAt)}</td></tr>))}</tbody>
+                    <td className="small">{f.severity}</td><td className="mono small"><EvLinks ids={f.supportingEvidenceIds} /></td><td className="mono small"><EvLinks ids={f.contradictingEvidenceIds} /></td><td className="small">{local(f.observedAt)}</td></tr>))}</tbody>
               </table></div>)}
             {pass.interpretation && pass.interpretation.unknowns.length > 0 && <p><strong>Still unknown:</strong> {pass.interpretation.unknowns.map((u) => <span key={u.field} className="badge b-unk" style={{ marginRight: 6 }}>{u.field} ({u.reason.replace(/_/g, " ")})</span>)}</p>}
-            {pass.modelRun.droppedClaims.length > 0 && <p className="small"><strong>Dropped (failed citation check):</strong> {pass.modelRun.droppedClaims.join("; ")}</p>}
+            {pass.modelRun.droppedClaims.length > 0 && <p className="small"><strong>Dropped by validation:</strong> {pass.modelRun.droppedClaims.join("; ")}</p>}
             <h3>Next inspection checks (deterministic ranking)</h3>
             <ol className="clean">{pass.nextChecks.map((c) => <li key={c.checkCode}><strong>{c.label}</strong> <span className="mono small">{c.checkCode}</span> — {c.decisionImpact}</li>)}</ol>
             {confirmable.length > 0 && (
